@@ -22,6 +22,7 @@
     "base64-js": "^1.5.1",
     "bluebird": "~3.7.2",
     "dingbat-to-unicode": "^1.0.1",
+    "jsdom": "^26.1.0",
     "jszip": "^3.10.1",
     "lop": "^0.4.2",
     "path-is-absolute": "^1.0.0",

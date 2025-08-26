@@ -1,0 +1,90 @@
+{
+  "timestamp": "2025-08-26T13:00:04.496Z",
+  "summary": {
+    "overallScore": 100,
+    "totalIssues": 0,
+    "criticalIssues": 0,
+    "compliance": "WCAG 2.1 Level AA"
+  },
+  "details": {
+    "contrast": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "failures": [],
+      "score": 100
+    },
+    "navigation": {
+      "focusableElements": 0,
+      "skipLinks": 0,
+      "tabStops": [
+        {
+          "tag": "body",
+          "id": "",
+          "className": "",
+          "text": "Test Document\n            Some",
+          "tabIndex": -1
+        }
+      ],
+      "issues": [],
+      "score": 100
+    },
+    "aria": {
+      "headings": [
+        {
+          "level": 1,
+          "text": "Test Document",
+          "hasId": false,
+          "tag": "h1"
+        }
+      ],
+      "landmarks": [],
+      "figures": [
+        {
+          "hasCaption": true,
+          "hasAriaLabelledBy": true,
+          "hasRole": true,
+          "hasAltText": true,
+          "captionText": "FIG 3-7-1Precision Obstacle Free Zone (POFZ)"
+        },
+        {
+          "hasCaption": true,
+          "hasAriaLabelledBy": true,
+          "hasRole": true,
+          "hasAltText": false,
+          "captionText": "FIGURE 2.1.3Aircraft Approach Zones and Safety Are"
+        }
+      ],
+      "lists": [],
+      "links": [],
+      "forms": [],
+      "issues": [],
+      "semanticScore": 100
+    },
+    "semantic": {},
+    "colorBlindness": {
+      "Protanopia": {
+        "colorDependentElements": 0,
+        "elements": []
+      },
+      "Deuteranopia": {
+        "colorDependentElements": 0,
+        "elements": []
+      },
+      "Tritanopia": {
+        "colorDependentElements": 0,
+        "elements": []
+      },
+      "Achromatopsia": {
+        "colorDependentElements": 0,
+        "elements": []
+      }
+    },
+    "overall": {
+      "score": 0,
+      "issues": [],
+      "passes": []
+    }
+  },
+  "recommendations": []
+}
