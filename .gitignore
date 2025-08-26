@@ -15,3 +15,14 @@ test-*-output.html
 # Development utilities (if they generate temp files)
 temp/
 *.tmp
+
+# Archive and backup directories
+archive/
+backup/
+
+# Generated outputs in examples
+examples/outputs/*.html
+
+# Temporary development files in tools
+tools/**/*.tmp
+tools/**/*-output.*

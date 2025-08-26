@@ -13,7 +13,12 @@
       "Bash(npm update)",
       "Bash(npx eslint:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(make:*)",
+      "Bash(grep:*)",
+      "Bash(chmod:*)",
+      "Bash(mammoth:*)",
+      "Bash(npx playwright install:*)"
     ],
     "deny": [],
     "ask": []
