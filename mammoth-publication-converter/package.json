@@ -1,0 +1,38 @@
+{
+  "name": "mammoth-publication-converter",
+  "version": "1.0.0",
+  "description": "Enterprise-grade document publication converter with advanced list processing, semantic sections, and accessibility compliance",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/cli.js",
+    "convert": "node src/cli.js convert",
+    "web": "node src/web-server.js",
+    "test": "node src/test-converter.js",
+    "setup": "node setup.js",
+    "demo": "node src/cli.js convert samples/ -o output/ --format html --verbose"
+  },
+  "keywords": [
+    "docx",
+    "html",
+    "converter",
+    "publication",
+    "mammoth",
+    "document-processing",
+    "accessibility"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "mammoth": "file:..",
+    "chalk": "^4.1.2",
+    "commander": "^9.0.0",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "ora": "^5.4.1",
+    "glob": "^8.0.3",
+    "fs-extra": "^11.1.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
