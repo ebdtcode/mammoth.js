@@ -4,3 +4,14 @@
 /static/jszip
 /mammoth.browser.js
 /mammoth.browser.min.js
+
+# Claude Code local settings (user-specific)
+.claude/settings.local.json
+
+# Test output files
+*-output.html
+test-*-output.html
+
+# Development utilities (if they generate temp files)
+temp/
+*.tmp
