@@ -8,6 +8,7 @@ const { chromium } = require('playwright');
 // Import all enhancement modules
 const { convertWithModularHierarchy } = require('./modular-hierarchical-converter');
 const { enhancedImageConverter, enhanceFiguresAndCaptions } = require('./enhanced-image-converter');
+const { processAllFigureTypes, getMultiLineFigureStyles } = require('./multi-line-figure-handler');
 const documentChunking = require('./lib/document-chunking');
 const chunkingIntegration = require('./lib/document-chunking-integration');
 
@@ -55,9 +56,9 @@ async function ultimateConvertWithChunking(inputPath, outputPath, options = {}) 
         console.log('📄 Phase 2: Processing hierarchical structures...');
         const hierarchicalHtml = await processHierarchicalStructure(result.value);
         
-        // Phase 3: Enhance figures and captions
-        console.log('📄 Phase 3: Enhancing figures and captions...');
-        const enhancedHtml = await enhanceFiguresAndCaptions(hierarchicalHtml);
+        // Phase 3: Enhance figures and captions (both single-line and multi-line)
+        console.log('📄 Phase 3: Enhancing figures and captions (all types)...');
+        const enhancedHtml = await processAllFigureTypes(hierarchicalHtml);
         
         // Phase 4: Document chunking and navigation
         console.log('📄 Phase 4: Chunking document and building navigation...');
@@ -666,6 +667,37 @@ function getCompleteStyles() {
         figure { margin: 2rem 0; text-align: center; }
         figure img { max-width: 100%; height: auto; }
         figcaption { margin-top: 0.5rem; font-style: italic; color: #666; }
+        
+        /* Multi-line figure styles */
+        .multi-line-figure {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .multi-line-figure-caption {
+            background: var(--sidebar-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px;
+            text-align: center;
+            margin: 0;
+            font-style: normal;
+        }
+        
+        .multi-line-figure .figure-number {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .multi-line-figure .figure-title {
+            font-weight: 600;
+            font-size: 1em;
+            color: var(--text-color);
+            line-height: 1.4;
+        }
         
         /* Tables */
         table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
