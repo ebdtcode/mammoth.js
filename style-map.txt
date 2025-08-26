@@ -1,0 +1,7 @@
+p[style-name='Title'] => h1.document-title:fresh
+p[style-name='Body Text'] => p.body-text
+p[style-name='BodyText'] => p.body-text
+p[style-name='heading 8'] => h6.heading-8
+p[style-name='Heading8'] => h6.heading-8
+p[style-name='Table Paragraph'] => p.table-paragraph
+p[style-name='TableParagraph'] => p.table-paragraph
