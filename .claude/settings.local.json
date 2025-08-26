@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test)",
+      "Bash(npx mocha:*)",
+      "Bash(npm install)",
+      "Bash(./node_modules/.bin/mocha:*)",
+      "Bash(node:*)",
+      "Bash(npm test:*)",
+      "Bash(npm install:*)",
+      "Bash(npm outdated)",
+      "Bash(npm audit:*)",
+      "Bash(npm update)",
+      "Bash(npx eslint:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

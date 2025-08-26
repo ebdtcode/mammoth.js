@@ -1,0 +1,55 @@
+{
+  "features": {
+    "basicConversion": true,
+    "security_standard": true,
+    "security_strict": true,
+    "security_permissive": true,
+    "tableFormatting": {
+      "count": 0,
+      "borders": false,
+      "backgrounds": false
+    },
+    "customHandlers": {
+      "registered": true,
+      "fallbackTriggered": false,
+      "fallbackCount": 0
+    },
+    "styleMappings": {
+      "h1": 0,
+      "h2": 0,
+      "h3": 0,
+      "blockquote": 0,
+      "pre": 0,
+      "figcaption": 0
+    },
+    "images": {
+      "inline": 1,
+      "extracted": 1,
+      "total": 1
+    },
+    "references": {
+      "footnotes": 0,
+      "endnotes": 0,
+      "hyperlinks": 0
+    },
+    "performance": {
+      "average": "5.59",
+      "min": "4.35",
+      "max": "9.47"
+    }
+  },
+  "warnings": [],
+  "errors": [],
+  "stats": {
+    "htmlLength": 191,
+    "paragraphs": 1,
+    "headers": 0,
+    "lists": 0,
+    "listItems": 0,
+    "tables": 0,
+    "images": 1,
+    "links": 0,
+    "strong": 0,
+    "emphasis": 0
+  }
+}

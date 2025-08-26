@@ -465,7 +465,7 @@ test("complex fields", (function() {
                     )
                 }),
                 isEmptyRun
-          ));
+            ));
         },
 
         "complex field nested within a hyperlink complex field is wrapped with the hyperlink": function() {
@@ -498,7 +498,7 @@ test("complex fields", (function() {
                 }),
                 isEmptyHyperlinkedRun,
                 isEmptyRun
-          ));
+            ));
         },
 
         "field without separate w:fldChar is ignored": function() {

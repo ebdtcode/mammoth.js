@@ -461,7 +461,7 @@ test('hyperlink target frame is used as anchor target', function() {
     );
     var converter = new DocumentConverter();
     return converter.convertToHtml(hyperlink).then(function(result) {
-        assert.equal(result.value, '<a href="#start" target="_blank">Hello.</a>');
+        assert.equal(result.value, '<a href="#start" target="_blank" rel="noopener">Hello.</a>');
     });
 });
 
@@ -727,6 +727,197 @@ test('footnotes are included after the main body', function() {
         var expectedOutput = '<p>Knock knock<sup><a href="#doc-42-footnote-4" id="doc-42-footnote-ref-4">[1]</a></sup></p>' +
             '<ol><li id="doc-42-footnote-4"><p>Who\'s there? <a href="#doc-42-footnote-ref-4">↑</a></p></li></ol>';
         assert.equal(result.value, expectedOutput);
+    });
+});
+
+test('footnotes with multiple references should not be duplicated', function() {
+    var footnoteReference1 = new documents.NoteReference({
+        noteType: "footnote",
+        noteId: "4"
+    });
+    var footnoteReference2 = new documents.NoteReference({
+        noteType: "footnote",
+        noteId: "4"
+    });
+    var document = new documents.Document(
+        [new documents.Paragraph([
+            runOfText("First ref"),
+            new documents.Run([footnoteReference1]),
+            runOfText(" second ref"),
+            new documents.Run([footnoteReference2]),
+            runOfText(".")
+        ])],
+        {
+            notes: new documents.Notes({
+                4: new documents.Note({
+                    noteType: "footnote",
+                    noteId: "4",
+                    body: [paragraphOfText("This is footnote 1")]
+                })
+            })
+        }
+    );
+
+    var converter = new DocumentConverter({
+        idPrefix: "doc-42-"
+    });
+    return converter.convertToHtml(document).then(function(result) {
+        // Test the fix: footnote should appear only once with multiple backlinks
+        var actualOutput = result.value;
+        
+        // Verify that the footnote references are generated with unique IDs
+        assert.ok(actualOutput.includes('First ref'));
+        assert.ok(actualOutput.includes('second ref'));
+        assert.ok(actualOutput.includes('This is footnote 1'));
+        
+        // Verify that footnote content appears only once (fixed!)
+        var footnoteContentMatches = (actualOutput.match(/This is footnote 1/g) || []).length;
+        assert.equal(footnoteContentMatches, 1, "Footnote should appear exactly once, but appears " + footnoteContentMatches + " times");
+        
+        // Verify that both references point to the same footnote
+        assert.ok(actualOutput.includes('href="#doc-42-footnote-4"'), "First reference should link to footnote");
+        
+        // Verify that both references are numbered [1] (same footnote)
+        var referenceNumberMatches = (actualOutput.match(/\[1\]/g) || []).length;
+        assert.equal(referenceNumberMatches, 2, "Both references should be numbered [1]");
+        
+        // Verify that we have unique reference IDs
+        assert.ok(actualOutput.includes('id="doc-42-footnote-ref-4"'), "Should have first reference ID");
+        assert.ok(actualOutput.includes('id="doc-42-footnote-ref-4-2"'), "Should have second reference ID");
+        
+        // Verify that footnote has multiple backlinks
+        var backlinkMatches = (actualOutput.match(/↑/g) || []).length;
+        assert.equal(backlinkMatches, 2, "Footnote should have 2 backlinks, but has " + backlinkMatches);
+    });
+});
+
+test('multiple footnotes with mixed single and multiple references', function() {
+    var footnote1Ref1 = new documents.NoteReference({noteType: "footnote", noteId: "1"});
+    var footnote1Ref2 = new documents.NoteReference({noteType: "footnote", noteId: "1"});
+    var footnote2Ref1 = new documents.NoteReference({noteType: "footnote", noteId: "2"});
+    var footnote3Ref1 = new documents.NoteReference({noteType: "footnote", noteId: "3"});
+    var footnote3Ref2 = new documents.NoteReference({noteType: "footnote", noteId: "3"});
+    var footnote3Ref3 = new documents.NoteReference({noteType: "footnote", noteId: "3"});
+    
+    var document = new documents.Document([
+        new documents.Paragraph([
+            runOfText("First"),
+            new documents.Run([footnote1Ref1]),
+            runOfText(" second"),
+            new documents.Run([footnote2Ref1]),
+            runOfText(" third"),
+            new documents.Run([footnote1Ref2]),
+            runOfText(" fourth"),
+            new documents.Run([footnote3Ref1]),
+            runOfText(" fifth"),
+            new documents.Run([footnote3Ref2]),
+            runOfText(" sixth"),
+            new documents.Run([footnote3Ref3]),
+            runOfText(".")
+        ])
+    ], {
+        notes: new documents.Notes({
+            1: new documents.Note({noteType: "footnote", noteId: "1", body: [paragraphOfText("Footnote 1")]}),
+            2: new documents.Note({noteType: "footnote", noteId: "2", body: [paragraphOfText("Footnote 2")]}),
+            3: new documents.Note({noteType: "footnote", noteId: "3", body: [paragraphOfText("Footnote 3")]})
+        })
+    });
+
+    var converter = new DocumentConverter({idPrefix: "test-"});
+    return converter.convertToHtml(document).then(function(result) {
+        var actualOutput = result.value;
+        
+        // Verify each footnote content appears exactly once
+        assert.equal((actualOutput.match(/Footnote 1/g) || []).length, 1, "Footnote 1 should appear once");
+        assert.equal((actualOutput.match(/Footnote 2/g) || []).length, 1, "Footnote 2 should appear once");
+        assert.equal((actualOutput.match(/Footnote 3/g) || []).length, 1, "Footnote 3 should appear once");
+        
+        // Verify reference numbering: [1] appears twice, [2] once, [3] appears 3 times
+        assert.equal((actualOutput.match(/\[1\]/g) || []).length, 2, "Reference [1] should appear twice");
+        assert.equal((actualOutput.match(/\[2\]/g) || []).length, 1, "Reference [2] should appear once");
+        assert.equal((actualOutput.match(/\[3\]/g) || []).length, 3, "Reference [3] should appear three times");
+        
+        // Verify total backlinks: 2 + 1 + 3 = 6
+        var backlinkMatches = (actualOutput.match(/↑/g) || []).length;
+        assert.equal(backlinkMatches, 6, "Should have 6 total backlinks");
+    });
+});
+
+test('endnotes with multiple references should not be duplicated', function() {
+    var endnoteRef1 = new documents.NoteReference({noteType: "endnote", noteId: "1"});
+    var endnoteRef2 = new documents.NoteReference({noteType: "endnote", noteId: "1"});
+    
+    var document = new documents.Document([
+        new documents.Paragraph([
+            runOfText("First endnote"),
+            new documents.Run([endnoteRef1]),
+            runOfText(" second endnote"),
+            new documents.Run([endnoteRef2]),
+            runOfText(".")
+        ])
+    ], {
+        notes: new documents.Notes({
+            1: new documents.Note({noteType: "endnote", noteId: "1", body: [paragraphOfText("This is endnote 1")]})
+        })
+    });
+
+    var converter = new DocumentConverter({idPrefix: "doc-"});
+    return converter.convertToHtml(document).then(function(result) {
+        var actualOutput = result.value;
+        
+        // Verify endnote content appears only once
+        var endnoteContentMatches = (actualOutput.match(/This is endnote 1/g) || []).length;
+        assert.equal(endnoteContentMatches, 1, "Endnote should appear exactly once");
+        
+        // Verify both references are numbered [1]
+        var referenceNumberMatches = (actualOutput.match(/\[1\]/g) || []).length;
+        assert.equal(referenceNumberMatches, 2, "Both references should be numbered [1]");
+        
+        // Verify endnote has multiple backlinks
+        var backlinkMatches = (actualOutput.match(/↑/g) || []).length;
+        assert.equal(backlinkMatches, 2, "Endnote should have 2 backlinks");
+    });
+});
+
+test('footnotes with circular references should be handled gracefully', function() {
+    // This is an edge case - creating a footnote that references itself or creates a loop
+    var footnoteRef1 = new documents.NoteReference({noteType: "footnote", noteId: "1"});
+    var footnoteRef2 = new documents.NoteReference({noteType: "footnote", noteId: "1"});
+    
+    var document = new documents.Document([
+        new documents.Paragraph([
+            runOfText("Normal text"),
+            new documents.Run([footnoteRef1]),
+            runOfText(" more text"),
+            new documents.Run([footnoteRef2]),
+            runOfText(".")
+        ])
+    ], {
+        notes: new documents.Notes({
+            1: new documents.Note({
+                noteType: "footnote",
+                noteId: "1",
+                body: [
+                    new documents.Paragraph([
+                        runOfText("This footnote references itself"),
+                        new documents.Run([new documents.NoteReference({noteType: "footnote", noteId: "1"})])
+                    ])
+                ]
+            })
+        })
+    });
+
+    var converter = new DocumentConverter({idPrefix: "test-"});
+    return converter.convertToHtml(document).then(function(result) {
+        var actualOutput = result.value;
+        
+        // Should not crash and should still deduplicate properly
+        var footnoteContentMatches = (actualOutput.match(/This footnote references itself/g) || []).length;
+        assert.equal(footnoteContentMatches, 1, "Footnote content should appear only once despite self-reference");
+        
+        // The main text should have [1] twice, and the footnote itself should also have [1]
+        var referenceNumberMatches = (actualOutput.match(/\[1\]/g) || []).length;
+        assert.ok(referenceNumberMatches >= 2, "Should handle self-referencing footnote without crashing");
     });
 });
 

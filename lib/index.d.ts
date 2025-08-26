@@ -6,6 +6,7 @@ interface Mammoth {
         toBuffer: () => Buffer,
     }>;
     images: Images;
+    security: Security;
 }
 
 type Input = NodeJsInput | BrowserInput;
@@ -34,6 +35,7 @@ interface Options {
     ignoreEmptyParagraphs?: boolean;
     idPrefix?: string;
     transformDocument?: (element: any) => any;
+    security?: SecurityConfig | false;
 }
 
 interface ImageConverter {
@@ -78,6 +80,38 @@ interface Error {
     type: "error";
     message: string;
     error: unknown;
+}
+
+type SecurityLevel = "strict" | "standard" | "permissive";
+
+interface SecurityConfig {
+    level?: SecurityLevel;
+    allowedProtocols?: string[];
+    allowRelativeUrls?: boolean;
+    allowFragments?: boolean;
+    allowDataUrls?: boolean;
+    customSanitizer?: (url: string) => string;
+    strict?: boolean;
+}
+
+interface SecuritySanitizer {
+    sanitizeUrl: (url: string) => string;
+    sanitizeAttributes: (attributes: any) => any;
+    getConfig: () => SecurityConfig;
+}
+
+interface Security {
+    createSanitizer: (config?: SecurityConfig) => SecuritySanitizer;
+    sanitizeUrl: (url: string) => string;
+    sanitizeAttributes: (attributes: any) => any;
+    SECURITY_LEVELS: {
+        STRICT: "strict";
+        STANDARD: "standard";
+        PERMISSIVE: "permissive";
+    };
+    DEFAULT_CONFIG: SecurityConfig;
+    STRICT_CONFIG: SecurityConfig;
+    PERMISSIVE_CONFIG: SecurityConfig;
 }
 
 declare const mammoth: Mammoth;

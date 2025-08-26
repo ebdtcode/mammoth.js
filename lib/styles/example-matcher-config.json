@@ -1,0 +1,89 @@
+{
+  "matchers": {
+    "custom-break": {
+      "factory": "function(options) { return new CustomBreakMatcher(options); }",
+      "options": {
+        "priority": 15,
+        "namespace": "custom",
+        "description": "Custom break matcher for special break types"
+      }
+    },
+    "section-break": {
+      "template": {
+        "elementType": "break",
+        "conditions": [
+          {
+            "type": "property",
+            "property": "breakType",
+            "value": "section"
+          }
+        ]
+      },
+      "options": {
+        "priority": 10,
+        "namespace": "document-structure",
+        "description": "Matches document section breaks"
+      }
+    },
+    "footnote": {
+      "template": {
+        "elementType": "note",
+        "conditions": [
+          {
+            "type": "property",
+            "property": "noteType",
+            "value": "footnote"
+          }
+        ]
+      },
+      "options": {
+        "priority": 12,
+        "namespace": "annotations",
+        "description": "Matches footnote references"
+      }
+    }
+  },
+  "plugins": {
+    "enabled": ["ExtendedBreakPlugin", "CustomElementPlugin"],
+    "disabled": [],
+    "autoload": true,
+    "searchPaths": ["./plugins", "../plugins"]
+  },
+  "xsltTransforms": {
+    "enabled": true,
+    "cachingEnabled": true,
+    "transformPaths": ["./transforms", "../transforms"],
+    "transforms": {
+      "complex-style-matcher": {
+        "path": "./transforms/complex-style-matcher.xsl",
+        "options": {
+          "priority": 20,
+          "namespace": "xslt-matchers",
+          "caching": true
+        }
+      },
+      "conditional-element-matcher": {
+        "path": "./transforms/conditional-element.xsl",
+        "options": {
+          "priority": 25,
+          "namespace": "xslt-matchers",
+          "caching": true
+        }
+      }
+    }
+  },
+  "errorHandling": {
+    "strictMode": false,
+    "logLevel": "warn",
+    "maxErrors": 100,
+    "fallbackStrategy": "suggest-alternatives",
+    "enableSuggestions": true,
+    "enableFuzzyMatching": true
+  },
+  "performance": {
+    "cacheMatchers": true,
+    "maxCacheSize": 1000,
+    "enableMetrics": false,
+    "preloadCommonMatchers": true
+  }
+}

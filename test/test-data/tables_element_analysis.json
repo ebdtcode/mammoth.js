@@ -1,0 +1,39 @@
+{
+  "document": "tables.docx",
+  "timestamp": "2025-08-26T02:13:22.388Z",
+  "statistics": {
+    "totalElements": 2,
+    "totalNamespaces": 1,
+    "unrecognizedElements": 3
+  },
+  "namespaces": [
+    "w"
+  ],
+  "unrecognizedElements": [
+    {
+      "name": "w:tblPr",
+      "frequency": 0,
+      "warning": "An unrecognised element was ignored: w:tblPr"
+    },
+    {
+      "name": "w:tblGrid",
+      "frequency": 0,
+      "warning": "An unrecognised element was ignored: w:tblGrid"
+    },
+    {
+      "name": "w:tcPr",
+      "frequency": 0,
+      "warning": "An unrecognised element was ignored: w:tcPr"
+    }
+  ],
+  "allElements": [
+    {
+      "name": "w:document",
+      "count": 1
+    },
+    {
+      "name": "w:styles",
+      "count": 1
+    }
+  ]
+}
