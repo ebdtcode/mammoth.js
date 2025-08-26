@@ -12,7 +12,8 @@
       "Bash(npm audit:*)",
       "Bash(npm update)",
       "Bash(npx eslint:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
